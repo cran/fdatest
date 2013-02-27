@@ -1,0 +1,17 @@
+38ae7e6fc21e95782fdb5feb947f3076 *DESCRIPTION
+df390c53434517b304ac5db487184641 *NAMESPACE
+708e6ad7bd8f25b43c13f9915bd1662b *R/ITP1bspline.R
+fec9a6c8f30df46d05e07855d4719bb3 *R/ITP1fourier.R
+7ec3cb76bda524f495d7682d1ab0657e *R/ITP2bspline.R
+9d5cba66843c2a3e68f1b233777459cc *R/ITP2fourier.R
+2f02e9d9981aab0de67c47735ba21d74 *R/ITP2pafourier.R
+c8c47cc2d28f787969f427b409767353 *R/ITPimage.R
+7aabcd13bc2a6068b73dbc5ff19a2c50 *data/NASAtemp.rda
+4e6dff06cfe3c66f7fceaee53cbdcf58 *man/ITP1bspline.Rd
+ca790ef825e72dc1cd7d99ed1abab14f *man/ITP1fourier.Rd
+e503fa75fc5613392de09d32d9721911 *man/ITP2bspline.Rd
+fac6eca5f304dbe308c8c72c97311d2b *man/ITP2fourier.Rd
+1cdbda98a07f776b970ec46d99136177 *man/ITP2pafourier.Rd
+70ffb662be3185bcea147a858b82fbf8 *man/ITPimage.Rd
+3d5843b28c81bb40e112cd69ac075b18 *man/NASAtemp.Rd
+bd76dbee7e0ec4787072f3e43105e36e *man/fdatest-package.Rd
