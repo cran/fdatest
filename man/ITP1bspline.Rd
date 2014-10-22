@@ -30,8 +30,12 @@ The number of iterations of the MC algorithm to evaluate the p-values of the per
 }
 
 \value{
-\item{basis}{String vector indicating the basis used for the first phase of the algorithm. Equal to \code{"B-spline"}.}
-\item{test}{String vector indicating the type of test performed. Equal to \code{"1pop"}.}
+\code{ITP1bspline} returns an object of \code{\link{class}} "\code{ITP1}".
+
+An object of class "\code{ITP1}" is a list containing at least the following components:
+
+\item{basis}{String vector indicating the basis used for the first phase of the algorithm. In this case equal to \code{"B-spline"}.}
+\item{test}{String vector indicating the type of test performed. In this case equal to \code{"1pop"}.}
 \item{mu}{Center of symmetry under the null hypothesis (as entered by the user).}
 \item{coeff}{Matrix of dimensions \code{c(n,p)} of the \code{p} coefficients of the B-spline basis expansion. Rows are associated to units and columns to the basis index.}
 \item{pval}{Uncorrected p-values for each basis coefficient.}

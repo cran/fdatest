@@ -126,8 +126,8 @@ function(data1,data2,maxfrequency=floor(dim(data1)[2]/2),B=10000,paired=FALSE){
   }
   pval_phase <- pval_amplitude <- numeric((p+1)/2)
   for(i in 1:(p+1)/2){
-    pval_phase[i] <- sum(T_phase[,i]>T0_phase[i])/B
-    pval_amplitude[i] <- sum(T_amplitude[,i]>T0_amplitude[i])/B
+    pval_phase[i] <- sum(T_phase[,i]>=T0_phase[i])/B
+    pval_amplitude[i] <- sum(T_amplitude[,i]>=T0_amplitude[i])/B
   }
   
   
@@ -138,10 +138,10 @@ function(data1,data2,maxfrequency=floor(dim(data1)[2]/2),B=10000,paired=FALSE){
   L_phase <- L_amplitude <- matrix(nrow=B,ncol=dim)
   for(j in 1:dim){
     ordine <- sort.int(T_phase[,j],index.return=T)$ix
-    q[ordine] <- (B:1-0.5)/(B+1)
+    q[ordine] <- (B:1)/(B)
     L_phase[,j] <- q
     ordine <- sort.int(T_amplitude[,j],index.return=T)$ix
-    q[ordine] <- (B:1-0.5)/(B+1)
+    q[ordine] <- (B:1)/(B)
     L_amplitude[,j] <- q
   }
   
@@ -160,12 +160,12 @@ function(data1,data2,maxfrequency=floor(dim(data1)[2]/2),B=10000,paired=FALSE){
       sup <- (dim-i)+j
       T0_temp <- fisher_cf(pval_2x_phase[inf:sup])
       T_temp <- fisher_cf_L(L_2x_phase[,inf:sup])
-      pval_temp <- sum(T_temp>T0_temp)/B
+      pval_temp <- sum(T_temp>=T0_temp)/B
       matrice_pval_asymm_phase[i,j] <- pval_temp
       
       T0_temp <- fisher_cf(pval_2x_amplitude[inf:sup])
       T_temp <- fisher_cf_L(L_2x_amplitude[,inf:sup])
-      pval_temp <- sum(T_temp>T0_temp)/B
+      pval_temp <- sum(T_temp>=T0_temp)/B
       matrice_pval_asymm_amplitude[i,j] <- pval_temp
     }
     print(paste('creating the p-value matrix: end of row ',as.character(dim-i+1),' out of ',as.character(dim),sep=''))
@@ -191,5 +191,6 @@ function(data1,data2,maxfrequency=floor(dim(data1)[2]/2),B=10000,paired=FALSE){
   ITP.result <- list(basis='paFourier',test='2pop',paired=as.character(paired),coeff_phase=phase,pval_phase=pval_phase,pval.matrix_phase=matrice_pval_asymm_phase,corrected.pval_phase=corrected.pval_phase,
                      coeff_amplitude=amplitude,pval_amplitude=pval_amplitude,pval.matrix_amplitude=matrice_pval_asymm_amplitude,corrected.pval_amplitude=corrected.pval_amplitude,labels=etichetta_ord,
                      data.eval=data.eval,heatmap.matrix_phase=matrice_pval_symm_phase,heatmap.matrix_amplitude=matrice_pval_symm_amplitude)
+  class(ITP.result) = 'ITP2'
   return(ITP.result)
 }

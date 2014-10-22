@@ -30,15 +30,16 @@ function(data,mu=0,order=2,nknots=dim(data)[2],B=10000){
   n <- dim(data)[1]
   J <- dim(data)[2]
   labels <- rep(1,n)
-  data <- data - matrix(data=mu,nrow=n,ncol=J)
+  data <- data - matrix(data=mu,nrow=n,ncol=J,byrow=TRUE)
   
   print('First step: basis expansion')
   #splines coefficients:
   bspl.basis <- create.bspline.basis(c(1,J),norder=order,breaks=seq(1,J,length.out=nknots))
-  dt <- (J-1)/(nknots-1)
   ascissa <- seq(1,J,1)
-  bspl.eval <- eval.basis(ascissa,bspl.basis)
-  coeff <- data %*% bspl.eval /dt
+  
+  data.fd <- Data2fd(t(data),ascissa,bspl.basis)
+  coeff <- t(data.fd$coef)
+  
   p <- dim(coeff)[2]
   
   #functional data
@@ -59,7 +60,7 @@ function(data,mu=0,order=2,nknots=dim(data)[2],B=10000){
   }
   pval <- numeric(p)
   for(i in 1:p){
-    pval[i] <- sum(T_coeff[,i]>T0[i])/B
+    pval[i] <- sum(T_coeff[,i]>=T0[i])/B
   }
   
   #combination
@@ -68,7 +69,7 @@ function(data,mu=0,order=2,nknots=dim(data)[2],B=10000){
   L <- matrix(nrow=B,ncol=p)
   for(j in 1:p){
     ordine <- sort.int(T_coeff[,j],index.return=T)$ix
-    q[ordine] <- (B:1-0.5)/(B+1)
+    q[ordine] <- (B:1)/(B)
     L[,j] <- q
   }
   
@@ -83,7 +84,7 @@ function(data,mu=0,order=2,nknots=dim(data)[2],B=10000){
       sup <- (p-i)+j
       T0_temp <- fisher_cf(pval_2x[inf:sup])
       T_temp <- fisher_cf_L(L_2x[,inf:sup])
-      pval_temp <- sum(T_temp>T0_temp)/B
+      pval_temp <- sum(T_temp>=T0_temp)/B
       matrice_pval_asymm[i,j] <- pval_temp
     }
     print(paste('creating the p-value matrix: end of row ',as.character(p-i+1),' out of ',as.character(p),sep=''))
@@ -103,5 +104,6 @@ function(data,mu=0,order=2,nknots=dim(data)[2],B=10000){
   corrected.pval <- pval.correct(matrice_pval_asymm)
   print('Interval Testing Procedure completed')
   ITP.result <- list(basis='B-spline',test='1pop',mu=mu,coeff=coeff,pval=pval,pval.matrix=matrice_pval_asymm,corrected.pval=corrected.pval,labels=labels,data.eval=data.eval,heatmap.matrix=matrice_pval_symm)
+  class(ITP.result) = 'ITP1'
   return(ITP.result)
 }

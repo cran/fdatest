@@ -41,9 +41,9 @@ function(data1,data2,mu=0,order=2,nknots=dim(data1)[2],B=10000,paired=FALSE){
   eval <- rbind(data1,data2)
   bspl.basis <- create.bspline.basis(c(1,J),norder=order,breaks=seq(1,J,length.out=nknots))
   ascissa <- seq(1,J,1)
-  dt <- (J-1)/(nknots-1)
-  bspl.eval <- eval.basis(ascissa,bspl.basis)
-  coeff <- eval %*% bspl.eval /dt
+  
+  data.fd <- Data2fd(t(eval),ascissa,bspl.basis)
+  coeff <- t(data.fd$coef)
   p <- dim(coeff)[2]
   
   #functional data
@@ -74,7 +74,7 @@ function(data1,data2,mu=0,order=2,nknots=dim(data1)[2],B=10000,paired=FALSE){
   }
   pval <- numeric(p)
   for(i in 1:p){
-    pval[i] <- sum(T_coeff[,i]>T0[i])/B
+    pval[i] <- sum(T_coeff[,i]>=T0[i])/B
   }
   
   
@@ -84,7 +84,7 @@ function(data1,data2,mu=0,order=2,nknots=dim(data1)[2],B=10000,paired=FALSE){
   L <- matrix(nrow=B,ncol=p)
   for(j in 1:p){
     ordine <- sort.int(T_coeff[,j],index.return=T)$ix
-    q[ordine] <- (B:1-0.5)/(B+1)
+    q[ordine] <- (B:1)/(B)
     L[,j] <- q
   }
   
@@ -99,7 +99,7 @@ function(data1,data2,mu=0,order=2,nknots=dim(data1)[2],B=10000,paired=FALSE){
       sup <- (p-i)+j
       T0_temp <- fisher_cf(pval_2x[inf:sup])
       T_temp <- fisher_cf_L(L_2x[,inf:sup])
-      pval_temp <- sum(T_temp>T0_temp)/B
+      pval_temp <- sum(T_temp>=T0_temp)/B
       matrice_pval_asymm[i,j] <- pval_temp
     }
     print(paste('creating the p-value matrix: end of row ',as.character(p-i+1),' out of ',as.character(p),sep=''))
@@ -120,5 +120,6 @@ function(data1,data2,mu=0,order=2,nknots=dim(data1)[2],B=10000,paired=FALSE){
   
   print('Interval Testing Procedure completed')
   ITPresult <- list(basis='B-spline',test='2pop',mu=mu,paired=as.character(paired),coeff=coeff,pval=pval,pval.matrix=matrice_pval_asymm,corrected.pval=corrected.pval,labels=etichetta_ord,data.eval=data.eval,heatmap.matrix=matrice_pval_symm)
+  class(ITPresult) = 'ITP2'
   return(ITPresult)
 }

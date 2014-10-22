@@ -105,7 +105,7 @@ function(data,mu=0,maxfrequency=floor(dim(data)[2]/2),B=10000){
   
   pval <- numeric(dim)
   for(i in 1:dim){
-    pval[i] <- sum(T_hotelling[,i]>T0[i])/B
+    pval[i] <- sum(T_hotelling[,i]>=T0[i])/B
   }
   
   #combination
@@ -114,7 +114,7 @@ function(data,mu=0,maxfrequency=floor(dim(data)[2]/2),B=10000){
   L <- matrix(nrow=B,ncol=dim)
   for(j in 1:dim){
     ordine <- sort.int(T_hotelling[,j],index.return=T)$ix
-    q[ordine] <- (B:1-0.5)/(B+1)
+    q[ordine] <- (B:1)/(B)
     L[,j] <- q
   }
   
@@ -129,7 +129,7 @@ function(data,mu=0,maxfrequency=floor(dim(data)[2]/2),B=10000){
       sup <- (dim-i)+j
       T0_temp <- fisher_cf(pval_2x[inf:sup])
       T_temp <- fisher_cf_L(L_2x[,inf:sup])
-      pval_temp <- sum(T_temp>T0_temp)/B
+      pval_temp <- sum(T_temp>=T0_temp)/B
       matrice_pval_asymm[i,j] <- pval_temp
     }
     print(paste('creating the p-value matrix: end of row ',as.character(dim-i+1),' out of ',as.character(dim),sep=''))
@@ -149,5 +149,6 @@ function(data,mu=0,maxfrequency=floor(dim(data)[2]/2),B=10000){
   corrected.pval <- pval.correct(matrice_pval_asymm)
   print('Interval Testing Procedure completed')
   ITP.result <- list(basis='Fourier',test='1pop',mu=mu,coeff=coeff,pval=pval,pval.matrix=matrice_pval_asymm,corrected.pval=corrected.pval,labels=labels,data.eval=data.eval,heatmap.matrix=matrice_pval_symm)
+  class(ITP.result) = 'ITP1'
   return(ITP.result)
 }

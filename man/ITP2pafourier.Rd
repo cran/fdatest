@@ -31,6 +31,10 @@ A logical indicating whether the test is paired. The default is \code{FALSE}.
 }
 
 \value{
+\code{ITP2pafourier} returns an object of \code{\link{class}} "\code{ITP2}".
+
+An object of class "\code{ITP2}" is a list containing at least the following components:
+
 \item{basis}{String vector indicating the basis used for the first phase of the algorithm. Equal to \code{"paFourier"}.}
 \item{test}{String vector indicating the type of test performed. Equal to \code{"2pop"}.}
 \item{paired}{Logical indicating whether the test is paired (as entered by the user).}
@@ -67,11 +71,11 @@ data(NASAtemp)
 # Performing the ITP
 ITP.result <- ITP2pafourier(NASAtemp$milan,NASAtemp$paris,maxfrequency=20,B=1000,paired=TRUE)
 # Plotting the results of the ITP
-\dontrun{
+#\dontrun{
 
-ITPimage(ITP.result)
+plot(ITP.result,main='NASA data',xrange=c(1,365),xlab='Day')
 
-}
+#}
 # Selecting the significant coefficients
 which(ITP.result$corrected.pval < 0.05)
 

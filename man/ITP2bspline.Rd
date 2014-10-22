@@ -37,8 +37,12 @@ A logical indicating whether the test is paired. The default is \code{FALSE}.
 }
 
 \value{
-\item{basis}{String vector indicating the basis used for the first phase of the algorithm. Equal to \code{"B-spline"}.}
-\item{test}{String vector indicating the type of test performed. Equal to \code{"2pop"}.}
+\code{ITP2bspline} returns an object of \code{\link{class}} "\code{ITP2}".
+
+An object of class "\code{ITP2}" is a list containing at least the following components:
+
+\item{basis}{String vector indicating the basis used for the first phase of the algorithm. In this case equal to \code{"B-spline"}.}
+\item{test}{String vector indicating the type of test performed. In this case equal to \code{"2pop"}.}
 \item{mu}{Difference between the first functional population and the second functional population under the null hypothesis (as entered by the user).}
 \item{paired}{Logical indicating whether the test is paired (as entered by the user).}
 \item{coeff}{Matrix of dimensions \code{c(n,p)} of the \code{p} coefficients of the B-spline basis expansion, with \code{n=n1+n2}. Rows are associated to units and columns to the basis index. The first \code{n1} rows report the coefficients of the first population units and the following \code{n2} rows report the coefficients of the second population units}
@@ -61,7 +65,8 @@ Alessia Pini, Simone Vantini
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-See also \code{\link{ITP1bspline}}, \code{\link{ITP1fourier}}, \code{\link{ITP2fourier}}, \code{\link{ITP2pafourier}}, and \code{\link{ITPimage}}.
+See also \code{\link{summary.ITPlm}} for summaries. 
+For different types of ITP-based tests, see \code{\link{ITP1bspline}}, \code{\link{ITP1fourier}}, \code{\link{ITP2fourier}}, \code{\link{ITP2pafourier}}, and \code{\link{ITPimage}}.
 }
 \examples{
 # Importing the NASA temperatures data set
@@ -69,11 +74,12 @@ data(NASAtemp)
 # Performing the ITP
 ITP.result <- ITP2bspline(NASAtemp$milan,NASAtemp$paris,nknots=50,B=1000)
 # Plotting the results of the ITP
-\dontrun{
+#\dontrun{
 
-ITPimage(ITP.result,abscissa.range=c(0,12))
+#ITPimage(ITP.result,abscissa.range=c(0,12))
+plot(ITP.result,main='NASA data',xrange=c(1,365),xlab='Day')
 
-}
+#}
 # Selecting the significant components for the radius at 5% level
 which(ITP.result$corrected.pval < 0.05)
 

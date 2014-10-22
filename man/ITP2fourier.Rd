@@ -34,8 +34,12 @@ A logical indicating whether the test is paired. The default is \code{FALSE}.
 }
 
 \value{
-\item{basis}{String vector indicating the basis used for the first phase of the algorithm. Equal to \code{"Fourier"}.}
-\item{test}{String vector indicating the type of test performed. Equal to \code{"2pop"}.}
+\code{ITP2fourier} returns an object of \code{\link{class}} "\code{ITP2}".
+
+An object of class "\code{ITP2}" is a list containing at least the following components:
+
+\item{basis}{String vector indicating the basis used for the first phase of the algorithm. In this case equal to \code{"Fourier"}.}
+\item{test}{String vector indicating the type of test performed. in this case equal to \code{"2pop"}.}
 \item{mu}{Difference between the first functional population and the second functional population under the null hypothesis (as entered by the user).}
 \item{paired}{Logical indicating whether the test is paired (as entered by the user).}
 \item{coeff}{Matrix of dimensions \code{c(n,p)} of the \code{p} coefficients of the Fourier basis expansion. Rows are associated to units and columns to the basis index: the first \code{n1} rows report the coefficients of the first population units and the following \code{n2} rows report the coefficients of the second population units; the first column is a0, the following \code{(p-1)/2} columns are the ak coefficients (sine coefficients) and the last \code{(p-1)/2} columns the bk coefficients (cosine coefficients).}
@@ -67,11 +71,11 @@ data(NASAtemp)
 # Performing the ITP
 ITP.result <- ITP2fourier(NASAtemp$milan,NASAtemp$paris,maxfrequency=20,B=1000,paired=TRUE)
 # Plotting the results of the ITP
-\dontrun{
+#\dontrun{
 
-ITPimage(ITP.result)
+plot(ITP.result,main='NASA data',xrange=c(1,365),xlab='Day')
 
-}
+#}
 # Selecting the significant coefficients
 which(ITP.result$corrected.pval < 0.05)
 

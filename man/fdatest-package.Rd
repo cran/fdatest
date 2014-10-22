@@ -29,7 +29,7 @@ A. Pini and S. Vantini (2013). The Interval Testing Procedure: Inference for Fun
 }
 \keyword{ package }
 \seealso{
-See also \code{\link{ITP1bspline}}, \code{\link{ITP1fourier}}, \code{\link{ITP2bspline}}, \code{\link{ITP2fourier}}, \code{\link{ITP2pafourier}}, and \code{\link{ITPimage}}.
+See also \code{\link{ITP1bspline}}, \code{\link{ITP1fourier}}, \code{\link{ITP2bspline}}, \code{\link{ITP2fourier}}, \code{\link{ITP2pafourier}}, \code{ITPlmbspline}, and \code{\link{ITPimage}}.
 }
 \examples{
 data(NASAtemp)
