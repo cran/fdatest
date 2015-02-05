@@ -14,7 +14,7 @@ function(formula,order=2,nknots=dim(model.response(model.frame(formula)))[2],B=1
     for(var in 1:p){
       pval_var <- matrice_pval_2_2x[p,var]
       inizio <- var
-      fine <- var #inizio fisso, fine aumenta salendo nelle righe
+      fine <- var 
       for(riga in (p-1):1){
         fine <- fine + 1
         pval_cono <- matrice_pval_2_2x[riga,inizio:fine]
@@ -25,14 +25,7 @@ function(formula,order=2,nknots=dim(model.response(model.frame(formula)))[2],B=1
     corrected.pval <- corrected.pval[p:1]
     return(corrected.pval)
   }
-  stat_lm_glob <- function(regr){
-    result <- summary(regr)$f[1]
-    return(result)
-  }
-  stat_lm_part <- function(regr){ # risultato: vettore con stat test t per ogni termine
-    result <- abs(summary(regr)$coefficients[,3])
-    return(result)
-  }
+  
   extract.residuals = function(regr){
     return(regr$residuals)
   }
@@ -42,7 +35,6 @@ function(formula,order=2,nknots=dim(model.response(model.frame(formula)))[2],B=1
   
   variables = all.vars(formula)
   y.name = variables[1]
-  #data.all = model.frame(formula)
   cl <- match.call()
   design.matrix = model.matrix(formula)
   mf = model.frame(formula)
@@ -72,39 +64,34 @@ function(formula,order=2,nknots=dim(model.response(model.frame(formula)))[2],B=1
   
   print('Second step: joint univariate tests')
   #univariate permutations
-  #attach(mf)
-  formula.const <- deparse(formula[[3]],width.cutoff = 500L) #estraggo dalla formula la parte dopo ~. se è lunga più di 500 caratteri non va!!!!
-  coeffnames <- paste('coeff[,',as.character(1:p),']',sep='')
-  formula.coeff <- paste(coeffnames,'~',formula.const) #ha dentro tutte le formule da usare
-  formula.coeff <- sapply(formula.coeff,as.formula)
-  #print(formula.coeff[[1]])
-  
-  formula.temp = coeff ~ design.matrix
-  mf.temp = cbind(model.frame(formula.temp)[-((p+1):(p+nvar+1))],as.data.frame(design.matrix[,-1]))
-  
-  regr0 = lapply(formula.coeff,lm,data=mf.temp)
+  regr0 = lm.fit(design.matrix,coeff)
   
   #test statistics:
-  T0_part = simplify2array(lapply(regr0,stat_lm_part))
+  Sigma <- chol2inv(regr0$qr$qr)
+  resvar <- colSums(regr0$residuals^2)/regr0$df.residual
+  se <- sqrt( matrix(diag(Sigma),nrow=(nvar+1),ncol=p,byrow=FALSE) * matrix(resvar,nrow=(nvar+1),ncol=p,byrow=TRUE))
+  T0_part <- abs(regr0$coeff / se)
   
   if(nvar >0){
-    T0_glob <- as.numeric(lapply(regr0,stat_lm_glob))
+    T0_glob <- colSums((regr0$fitted - matrix(colMeans(regr0$fitted),nrow=n,ncol=p,byrow=TRUE))^2)/ ((nvar)*resvar)
   }else{
-    method = 'responses' # se ho solo intercetta permutare i residui o le y è la stessa roba!
+    method = 'responses' 
     T0_glob = numeric(p)
     T0_part = t(as.matrix(T0_part))
   }
   
-  
-  
   #calculate residuals
   if(method=='residuals'){
-    #calcolo i residui. 
-    #un vettore di residui per ogni variabile (1:p) 
-    #e per ogni test parziale da fare (nvar+1) 
-    #metto tutto in un array di dim (nvar+1,n,p)
+    #n residuals for each coefficient of basis expansion (1:p) 
+    #and for each partial test + global test (nvar+1) 
+    #saved in array of dim (nvar+1,n,p)
+    formula.const <- deparse(formula[[3]],width.cutoff = 500L) #extracting the part after ~ on formula. this will not work if the formula is longer than 500 char
     design.matrix.names2 = design.matrix
     var.names2 = var.names
+    coeffnames <- paste('coeff[,',as.character(1:p),']',sep='')
+    formula.temp = coeff ~ design.matrix
+    mf.temp = cbind(model.frame(formula.temp)[-((p+1):(p+nvar+1))],as.data.frame(design.matrix[,-1]))
+    
     if(length(grep('factor',formula.const))>0){
       index.factor = grep('factor',var.names)
       replace.names = paste('group',(1:length(index.factor)),sep='')
@@ -113,34 +100,32 @@ function(formula,order=2,nknots=dim(model.response(model.frame(formula)))[2],B=1
     }
     
     residui = array(dim=c(nvar+1,n,p))
-    fitted_part = array(dim=c(nvar+1,n,p)) # per ogni variabile che devo testare ho i coeff del modello ridotto (senza quella variabile)
+    fitted_part = array(dim=c(nvar+1,n,p)) 
     formula.coeff_part = vector('list',nvar+1)
     regr0_part = vector('list',nvar+1)
     #coeff.perm_part = array(dim=c(nvar+1,n,p))
-    for(ii in 2:(nvar+1)){ #il primo è l'intercetta la tratto a parte
+    for(ii in 2:(nvar+1)){ #the first one is the intercept. treated as special case after loop
       var.ii = var.names2[ii]
-      variables.reduced = var.names2[-c(1,which(var.names2==var.ii))] #nomi di tutte le variabili tranne intercetta e quella da testare
+      variables.reduced = var.names2[-c(1,which(var.names2==var.ii))] 
       if(nvar>1){
         formula.temp = paste(variables.reduced,collapse=' + ')
       }else{
-        formula.temp = '1' #se ho una sola variabile il modello giusto ha solo l'intercetta
+        formula.temp = '1' #removing the only variable -> reduced model only has intercept term
       }
       
       formula.temp2 = coeff ~ design.matrix.names2
       mf.temp2 = cbind(model.frame(formula.temp2)[-((p+1):(p+nvar+1))],as.data.frame(design.matrix.names2[,-1]))
       
-      
-      formula.coeff.temp <- paste(coeffnames,'~',formula.temp) #ha dentro tutte le formule da usare
+      formula.coeff.temp <- paste(coeffnames,'~',formula.temp) 
       formula.coeff_part[[ii]] <- sapply(formula.coeff.temp,as.formula)
       regr0_part[[ii]] = lapply(formula.coeff_part[[ii]],lm,data=mf.temp2)
       
       residui[ii,,] = simplify2array(lapply(regr0_part[[ii]],extract.residuals))
       fitted_part[ii,,] = simplify2array(lapply(regr0_part[[ii]],extract.fitted))
       
-      #coeff.perm_part[ii,,] = fitted_part[ii,,] + residui[ii,,]
       
     }
-    ii = 1 # intercetta
+    ii = 1 # intercept
     formula.temp = paste(formula.const,' -1', sep='')
     formula.coeff.temp <- paste(coeffnames,'~',formula.temp)
     formula.coeff_part[[ii]] <- sapply(formula.coeff.temp,as.formula)
@@ -151,42 +136,40 @@ function(formula,order=2,nknots=dim(model.response(model.frame(formula)))[2],B=1
     
   }
   
-  
   T_glob <- matrix(ncol=p,nrow=B)
   T_part = array(dim=c(B,nvar+1,p))
-  #creo formula con coeff permutati
-  coeffpermnames <- paste('coeff_perm[,',as.character(1:p),']',sep='')
-  formula.coeff_perm <- paste(coeffpermnames,'~',formula.const) #ha dentro tutte le formule da usare
-  formula.coeff_perm <- sapply(formula.coeff_perm,as.formula)
   
   for (perm in 1:B){
     # the F test is the same for both methods
     if(nvar >0){
       permutazioni <- sample(n)
       coeff_perm <- coeff[permutazioni,]
-    }else{ # sto facendo un test sull'intercetta e basta. cambio i segni
+    }else{ # test on intercept permuting signs
       signs <- rbinom(n,1,0.5)*2 - 1
       coeff_perm <- coeff*signs
     }
     
-    formula.temp.perm = coeff_perm ~ design.matrix
-    mf.temp.perm = cbind(model.frame(formula.temp.perm)[-((p+1):(p+nvar+1))],as.data.frame(design.matrix[,-1]))
-    regr_perm = lapply(formula.coeff_perm,lm,data=mf.temp.perm)
+    regr_perm = lm.fit(design.matrix,coeff_perm)
+    Sigma <- chol2inv(regr_perm$qr$qr)
+    resvar <- colSums(regr_perm$residuals^2)/regr_perm$df.residual
+    
     if(nvar > 0)
-      T_glob[perm,] <- as.numeric(lapply(regr_perm,stat_lm_glob))
+      T_glob[perm,] <- colSums((regr_perm$fitted - matrix(colMeans(regr_perm$fitted),nrow=n,ncol=p,byrow=TRUE))^2)/ ((nvar)*resvar)
     
     # partial tests: differ depending on the method
     if(method=='responses'){
-      T_part[perm,,] = simplify2array(lapply(regr_perm,stat_lm_part))
+      se <- sqrt( matrix(diag(Sigma),nrow=(nvar+1),ncol=p,byrow=FALSE) * matrix(resvar,nrow=(nvar+1),ncol=p,byrow=TRUE))
+      T_part[perm,,] <- abs(regr0$coeff / se)
     }else if(method=='residuals'){
       residui_perm = residui[,permutazioni,]
       regr_perm_part = vector('list',nvar+1)
-      for(ii in 1:(nvar+1)){ #il primo è l'intercetta la tratto a parte
-        coeff_perm = fitted_part[ii,,] + residui_perm[ii,,]  #sono le nuove y
-        formula.temp.perm = coeff_perm ~ design.matrix
-        mf.temp.perm = cbind(model.frame(formula.temp.perm)[-((p+1):(p+nvar+1))],as.data.frame(design.matrix[,-1]))
-        regr_perm_part[[ii]] = lapply(formula.coeff_perm,lm,data=mf.temp.perm)
-        T_part[perm,ii,] = simplify2array(lapply(regr_perm_part[[ii]] ,stat_lm_part))[ii,]
+      for(ii in 1:(nvar+1)){ 
+        coeff_perm = fitted_part[ii,,] + residui_perm[ii,,]  
+        regr_perm = lm.fit(design.matrix,coeff_perm)
+        Sigma <- chol2inv(regr_perm$qr$qr)
+        resvar <- colSums(regr_perm$residuals^2)/regr_perm$df.residual
+        se <- sqrt( matrix(diag(Sigma),nrow=(nvar+1),ncol=p,byrow=FALSE) * matrix(resvar,nrow=(nvar+1),ncol=p,byrow=TRUE))
+        T_part[perm,ii,] = abs(regr_perm$coeff / se)[ii,]
       }
     }
   }
@@ -275,13 +258,10 @@ function(formula,order=2,nknots=dim(model.response(model.frame(formula)))[2],B=1
     corrected.pval_part[ii,] = pval.correct(matrice_pval_asymm_part[ii,,])
   }
   
-  coeff.regr = matrix(nrow=nvar+1,ncol=p)
-  for(i in 1:(p)){
-    coeff.regr[,i] = regr0[[i]]$coeff
-  }
+  coeff.regr = regr0$coeff
   coeff.t <- t(bspl.eval.smooth %*% t(coeff.regr))
   
-  fitted.regr = simplify2array(lapply(regr0,extract.fitted))
+  fitted.regr = regr0$fitted
   fitted.t <- t(bspl.eval.smooth %*% t(fitted.regr))
   
   rownames(corrected.pval_part) = var.names
@@ -294,30 +274,6 @@ function(formula,order=2,nknots=dim(model.response(model.frame(formula)))[2],B=1
   R2.t = colSums((fitted.t - matrix(data=ybar.t,nrow=n,ncol=npt,byrow=TRUE))^2)/colSums((data.eval - matrix(data=ybar.t,nrow=n,ncol=npt,byrow=TRUE))^2)
   
   print('Interval Testing Procedure completed')
-  
-  #   printresult = vector('list')
-  #   printresult$call = cl
-  #   #class(printresult) <- "lm"
-  #   printresult$coefficients = matrix(data=apply(corrected.pval_part,1,min),ncol=1)
-  #   rownames(printresult$coefficients) = var.names
-  #   colnames(printresult$coefficients) = 'Minimum p-value'
-  #   printresult$R2 = as.matrix(range(R2.t))
-  #   colnames(printresult$R2) = 'Range of functional R-squared'
-  #   rownames(printresult$R2) = c('Min R-squared', 'Max R-squared')
-  #   printresult$ftest = as.matrix(min(corrected.pval_glob))
-  #   colnames(printresult$ftest) = 'Minimum p-value'
-  #   
-  #   signif = rep('',length(var.names))
-  #   signif[which(printresult$coefficients[,1] <0.001)] = '***'
-  #   signif[which(printresult$coefficients[,1] <0.01 & printresult$coefficients[,1] >= 0.001)] = '**'
-  #   signif[which(printresult$coefficients[,1] <0.05 & printresult$coefficients[,1] >= 0.01)] = '*'
-  #   signif[which(printresult$coefficients[,1] <0.1 & printresult$coefficients[,1] >= 0.05)] = '.'
-  #   printresult$coefficients[,2] = signif
-  #   colnames(printresult$coefficients) = c('Minimum p-value','')
-  
-  #printresult
-  
-  
   
   ITPresult <- list(call=cl,design.matrix=design.matrix,basis='B-spline',coeff=coeff,coeff.regr=coeff.regr,
                     pval.F=pval_glob,pval.matrix.F=matrice_pval_asymm_glob,corrected.pval.F=corrected.pval_glob,

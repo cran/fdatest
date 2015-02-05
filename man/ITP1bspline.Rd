@@ -65,11 +65,12 @@ data(NASAtemp)
 # Performing the ITP for two populations with the B-spline basis
 ITP.result <- ITP1bspline(NASAtemp$paris,mu=4,nknots=50,B=1000)
 # Plotting the results of the ITP
-\dontrun{
+plot(ITP.result,xrange=c(0,12),main='Paris temperatures')
 
+# Plotting the p-value heatmap
 ITPimage(ITP.result,abscissa.range=c(0,12))
 
-}
+
 # Selecting the significant components for the radius at 5% level
 which(ITP.result$corrected.pval < 0.05)
 

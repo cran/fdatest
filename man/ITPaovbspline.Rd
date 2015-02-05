@@ -59,12 +59,15 @@ An object of class "\code{ITPlm}" is a list containing at least the following co
 \item{heatmap.matrix.F}{Heatmap matrix of p-values of functional F-test (used only for plots).}
 \item{heatmap.matrix.factors}{Heatmap matrix of p-values of functional F-tests on each factor of the analysis of variance (used only for plots).}
 }
+\encoding{utf-8}
 \references{
 D. Freedman and D. Lane (1983). A Nonstochastic Interpretation of Reported Significance Levels. \emph{Journal of Business & Economic Statistics} 1.4, 292-298.
 
 B. F. J. Manly (2006). Randomization, \emph{Bootstrap and Monte Carlo Methods in Biology}. Vol. 70. CRC Press.
 
 A. Pini and S. Vantini (2013). The Interval Testing Procedure: Inference for Functional Data Controlling the Family Wise Error Rate on Intervals. \emph{MOX-report 13/2013}, Politecnico di Milano.
+
+K. Abramowicz, S. De Luna, C. Häger, A. Pini, L. Schelin, and S. Vantini (2015). Distribution-Free Interval-Wise Inference for Functional-on-Scalar Linear Models. \emph{MOX-report 3/2015}, Politecnico di Milano.
 
 }
 \author{
@@ -85,8 +88,6 @@ temperature <- rbind(NASAtemp$milan,NASAtemp$paris)
 groups <- c(rep(0,22),rep(1,22))
 
 # Performing the ITP
-\dontrun{
-
 ITP.result <- ITPaovbspline(temperature ~ groups,B=1000,nknots=20,order=3)
 
 # Summary of the ITP results
@@ -99,8 +100,6 @@ plot(ITP.result)
 # All graphics on the same device
 layout(matrix(1:4,nrow=2,byrow=FALSE))
 plot(ITP.result,main='NASA data', plot.adjpval = TRUE,xlab='Day',xrange=c(1,365))
-
-}
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

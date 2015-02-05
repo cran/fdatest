@@ -43,31 +43,20 @@ Alessia pini, Simone Vantini
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-See also \code{\link{ITP1bspline}}, \code{\link{ITP1fourier}}, \code{\link{ITP2bspline}}, \code{\link{ITP2fourier}}, and \code{\link{ITP2pafourier}}.
+See \code{\link{plot.ITP1}}, \code{\link{plot.ITP2}}, \code{\link{plot.ITPlm}}, and \code{\link{plot.ITPaov}} for the plot method applied to the ITP results of one- and two-population tests, linear models, and ANOVA, respectively.
+
+See also \code{\link{ITP1bspline}}, \code{\link{ITP1fourier}}, \code{\link{ITP2bspline}}, \code{\link{ITP2fourier}}, and \code{\link{ITP2pafourier}} for applying the ITP.
 }
 \examples{
-
 # Importing the NASA temperatures data set
 data(NASAtemp)
-# Performing the ITP for one population with the Fourier basis
-ITP.result <- ITP1fourier(NASAtemp$milan,maxfrequency=15,B=1000)
-# Plotting the results of the ITP
-\dontrun{
-
-ITPimage(ITP.result)
-
-}
-# Selecting the significant coefficients
-which(ITP.result$corrected.pval < 0.05)
 
 # Performing the ITP for two populations with the B-spline basis
-ITP.result <- ITP2bspline(NASAtemp$milan,NASAtemp$paris,nknots=30,B=1000)
-# Plotting the results of the ITP
-\dontrun{
+ITP.result <- ITP2bspline(NASAtemp$milan,NASAtemp$paris,nknots=20,B=1000)
 
+# Plotting the results of the ITP
 ITPimage(ITP.result,abscissa.range=c(0,12))
 
-}
 # Selecting the significant components for the radius at 5% level
 which(ITP.result$corrected.pval < 0.05)
 

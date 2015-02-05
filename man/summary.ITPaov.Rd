@@ -26,16 +26,21 @@ The function \code{summary.ITPaov} computes and returns a list of summary statis
 \item{R2}{Range of the functional R-squared.}
 \item{ftest}{ITP-adjusted minimum p-value of functional F-test.}
 }
+\encoding{utf-8}
 \references{
 A. Pini and S. Vantini (2013). The Interval Testing Procedure: Inference for Functional Data Controlling the Family Wise Error Rate on Intervals. \emph{MOX-report 13/2013}, Politecnico di Milano.
+
+K. Abramowicz, S. De Luna, C. Häger, A. Pini, L. Schelin, and S. Vantini (2015). Distribution-Free Interval-Wise Inference for Functional-on-Scalar Linear Models. \emph{MOX-report 3/2015}, Politecnico di Milano.
 
 }
 \author{
 Alessia Pini, Simone Vantini
 }
 \seealso{
-See also \code{ITPlmbspline}, \code{\link{ITP1bspline}}, \code{\link{ITP2bspline}}, \code{\link{ITP2fourier}}, \code{\link{ITP2pafourier}}, and \code{\link{ITPimage}}.
-}\examples{
+See \code{\link{ITPaovbspline}} for fitting and testing the functional ANOVA and \code{\link{plot.ITPaov}} for plots.
+See also  \code{\link{ITPlmbspline}}, \code{\link{ITP1bspline}}, \code{\link{ITP2bspline}}, \code{\link{ITP2fourier}}, \code{\link{ITP2pafourier}}.
+}
+\examples{
 # Importing the NASA temperatures data set
 data(NASAtemp)
 
@@ -43,14 +48,10 @@ temperature <- rbind(NASAtemp$milan,NASAtemp$paris)
 groups <- c(rep(0,22),rep(1,22))
 
 # Performing the ITP
-\dontrun{
-
 ITP.result <- ITPaovbspline(temperature ~ groups,B=1000,nknots=20,order=3)
 
 # Summary of the ITP results
 summary(ITP.result)
-
-}
 
 
 }

@@ -63,6 +63,8 @@ A. Pini and S. Vantini (2013). The Interval Testing Procedure: Inference for Fun
 Alessia Pini, Simone Vantini
 }
 \seealso{
+\code{\link{ITPimage}} for the plot of p-values heatmaps. 
+
 See also \code{\link{ITP2bspline}}, \code{\link{ITP2fourier}}, \code{\link{ITP2pafourier}} to perform the ITP to test for differences between two populations. 
 See \code{\link{plot.ITP1}} and \code{\link{plot.ITPlm}} for the plot method applied to the ITP results of one-population tests and a linear models, respectively.
 }
@@ -79,14 +81,6 @@ plot(ITP.result.bspline,xlab='Day',xrange=c(1,365),main='NASA data')
 # Selecting the significant components for the radius at 5% level
 which(ITP.result.bspline$corrected.pval < 0.05)
 
-# Performing the ITP for two populations with the Fourier basis
-ITP.result.fourier <- ITP2fourier(NASAtemp$milan,NASAtemp$paris,
-                       maxfrequency=20,B=1000,paired=TRUE)
-# Plotting the results of the ITP
-layout(1)
-plot(ITP.result.fourier,xlab='Day',xrange=c(1,365),main='NASA data')
-# Selecting the significant components for the radius at 5% level
-which(ITP.result.fourier$corrected.pval < 0.05)
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

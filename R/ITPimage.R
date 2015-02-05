@@ -1,7 +1,9 @@
 ITPimage <-
 function(ITP.result,alpha=0.05,abscissa.range=c(0,1),nlevel=20){
+  
   if(ITP.result$basis=='paFourier' & ITP.result$test=='2pop'){
     #2 plots: phase and amplitude
+    par(ask=T) 
     #phase:
     p <- dim(ITP.result$heatmap.matrix_phase)[1]
     min.ascissa <- 1-(p-1)/2
@@ -10,8 +12,9 @@ function(ITP.result,alpha=0.05,abscissa.range=c(0,1),nlevel=20){
     ordinata.grafico <- 1:p
     colori=rainbow(nlevel,start=0.15,end=0.67)
     colori <- colori[length(colori):1]
-    dev.new()
-    layout(rbind(c(1,1,1,1,1,1,1,1,2),c(1,1,1,1,1,1,1,1,2),c(3,3,3,3,3,3,3,3,0),c(4,4,4,4,4,4,4,4,0)))
+    ##dev.new()
+    #layout(rbind(c(1,1,1,1,1,1,1,1,2),c(1,1,1,1,1,1,1,1,2),c(3,3,3,3,3,3,3,3,0),c(4,4,4,4,4,4,4,4,0)))
+    layout(rbind(1:2,c(3,0),c(4,0)),widths=c(8,1),heights=c(2,1,1))
     par(mar=c(4.1, 4.1, 3, .2),cex.main=1.5,cex.lab=1.1,las=0)
     #1: heatmap
     matrice.quad <- ITP.result$heatmap.matrix_phase[,(p+1):(3*p)]
@@ -46,8 +49,9 @@ function(ITP.result,alpha=0.05,abscissa.range=c(0,1),nlevel=20){
     abscissa.new <- seq(abscissa.range[1],abscissa.range[2],length.out=dim(ITP.result$data.eval)[2])
     matplot(abscissa.new,t(ITP.result$data.eval),col=ITP.result$labels,type='l',main='Functional data',xlab='Abscissa',ylab='Value',xaxs='i')
     #amplitude
-    dev.new()
-    layout(rbind(c(1,1,1,1,1,1,1,1,2),c(1,1,1,1,1,1,1,1,2),c(3,3,3,3,3,3,3,3,0),c(4,4,4,4,4,4,4,4,0)))
+    #dev.new()
+    #layout(rbind(c(1,1,1,1,1,1,1,1,2),c(1,1,1,1,1,1,1,1,2),c(3,3,3,3,3,3,3,3,0),c(4,4,4,4,4,4,4,4,0)))
+    layout(rbind(1:2,c(3,0),c(4,0)),widths=c(8,1),heights=c(2,1,1))
     par(mar=c(4.1, 4.1, 3, .2),cex.main=1.5,cex.lab=1.1,las=0)
     #1: heatmap
     matrice.quad <- ITP.result$heatmap.matrix_amplitude[,(p+1):(3*p)]
@@ -80,6 +84,7 @@ function(ITP.result,alpha=0.05,abscissa.range=c(0,1),nlevel=20){
     #4: functional data
     abscissa.new <- seq(abscissa.range[1],abscissa.range[2],length.out=dim(ITP.result$data.eval)[2])
     matplot(abscissa.new,t(ITP.result$data.eval),col=ITP.result$labels,type='l',main='Functional data',xlab='Abscissa',ylab='Value',xaxs='i')
+    par(ask=FALSE)
   }else if(ITP.result$basis=='Fourier'){
     p <- dim(ITP.result$heatmap.matrix)[1]
     min.ascissa <- 1-(p-1)/2
@@ -88,8 +93,9 @@ function(ITP.result,alpha=0.05,abscissa.range=c(0,1),nlevel=20){
     ordinata.grafico <- 1:p
     colori=rainbow(nlevel,start=0.15,end=0.67)
     colori <- colori[length(colori):1]
-    dev.new()
-    layout(rbind(c(1,1,1,1,1,1,1,1,2),c(1,1,1,1,1,1,1,1,2),c(3,3,3,3,3,3,3,3,0),c(4,4,4,4,4,4,4,4,0)))
+    #dev.new()
+    #layout(rbind(c(1,1,1,1,1,1,1,1,2),c(1,1,1,1,1,1,1,1,2),c(3,3,3,3,3,3,3,3,0),c(4,4,4,4,4,4,4,4,0)))
+    layout(rbind(1:2,c(3,0),c(4,0)),widths=c(8,1),heights=c(2,1,1))
     par(mar=c(4.1, 4.1, 3, .2),cex.main=1.5,cex.lab=1.1,las=0)
     #1: heatmap
     matrice.quad <- ITP.result$heatmap.matrix[,(p+1):(3*p)]
@@ -139,8 +145,9 @@ function(ITP.result,alpha=0.05,abscissa.range=c(0,1),nlevel=20){
     ordinata.grafico <- seq(abscissa.range[1],abscissa.range[2],length.out=p) - abscissa.range[1]
     colori=rainbow(nlevel,start=0.15,end=0.67)
     colori <- colori[length(colori):1]
-    dev.new()
-    layout(rbind(c(1,1,1,1,1,1,1,1,2),c(1,1,1,1,1,1,1,1,2),c(3,3,3,3,3,3,3,3,0),c(4,4,4,4,4,4,4,4,0)))
+    #dev.new()
+    #layout(rbind(c(1,1,1,1,1,1,1,1,2),c(1,1,1,1,1,1,1,1,2),c(3,3,3,3,3,3,3,3,0),c(4,4,4,4,4,4,4,4,0)))
+    layout(rbind(1:2,c(3,0),c(4,0)),widths=c(8,1),heights=c(2,1,1))
     #1: heatmap
     par(mar=c(4.1, 4.1, 3, .2),cex.main=1.5,cex.lab=1.1,las=0)
     matrice.quad <- ITP.result$heatmap.matrix[,(p+1):(3*p)]

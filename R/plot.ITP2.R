@@ -25,7 +25,7 @@ function(x,xrange=c(0,1),alpha1=0.05,alpha2=0.01,
     
     matplot(Abscissa,t(object$data.eval),type='l',main=main.data,ylab=ylab,col=colors,lwd=lwd,ylim=ylim,...)
     
-    ################################################################à
+    ################################################################
     # pval
     main.p <- paste(main,': Adjusted p-values')
     main.p <- sub("^ : +", "", main.p)
@@ -91,7 +91,7 @@ function(x,xrange=c(0,1),alpha1=0.05,alpha2=0.01,
     matplot(Abscissa,t(object$data.eval),type='l',main=main.data,ylab=ylab,col=colors,lwd=lwd,add=TRUE,...)
     
     
-    ################################################################à
+    ################################################################
     # pval
     main.p <- paste(main,': Adjusted p-values')
     main.p <- sub("^ : +", "", main.p)
@@ -135,7 +135,7 @@ function(x,xrange=c(0,1),alpha1=0.05,alpha2=0.01,
     
     matplot(Abscissa,t(object$data.eval),type='l',main=main.data,ylab=ylab,col=colors,lwd=lwd,ylim=ylim,...)
     
-    ################################################################à
+    ################################################################
     # pval phase
     main.p <- paste(main,': Adjusted p-values - phase')
     main.p <- sub("^ : +", "", main.p)
@@ -163,7 +163,7 @@ function(x,xrange=c(0,1),alpha1=0.05,alpha2=0.01,
     }
     points(1:p,object$corrected.pval_phase,pch=pch)
     
-    ################################################################à
+    ################################################################
     # pval amplitude
     main.p <- paste(main,': Adjusted p-values - amplitude')
     main.p <- sub("^ : +", "", main.p)

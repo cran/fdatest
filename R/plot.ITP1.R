@@ -30,7 +30,7 @@ function(x,xrange=c(0,1),alpha1=0.05,alpha2=0.01,
     }
     lines(abscissa.mu,mu,col='gray',lwd=2)
     
-    ################################################################à
+    ################################################################
     # pval
     main.p <- paste(main,': Adjusted p-values')
     main.p <- sub("^ : +", "", main.p)
@@ -99,7 +99,7 @@ function(x,xrange=c(0,1),alpha1=0.05,alpha2=0.01,
     }
     lines(abscissa.mu,mu,col='gray',lwd=2)
     
-    ################################################################à
+    ################################################################
     # pval
     main.p <- paste(main,': Adjusted p-values')
     main.p <- sub("^ : +", "", main.p)

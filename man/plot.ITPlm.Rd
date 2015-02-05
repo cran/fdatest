@@ -62,8 +62,11 @@ The function produces a graphical output of the ITP results:  the plot of the fu
 The basis components selected as significant by the tests at level \code{alpha1} and \code{alpha2} are highlighted in the plot of the corrected p-values and in the one of functional data by gray areas (light and dark gray, respectively). 
 The plot of functional data reports the gray areas corresponding to a significant F-test. The plots of functional regression coefficients report the gray areas corresponding to significant t-tests for the corresponding covariate.
 }
+\encoding{utf-8}
 \references{
 A. Pini and S. Vantini (2013). The Interval Testing Procedure: Inference for Functional Data Controlling the Family Wise Error Rate on Intervals. \emph{MOX-report 13/2013}, Politecnico di Milano.
+
+K. Abramowicz, S. De Luna, C. Häger, A. Pini, L. Schelin, and S. Vantini (2015). Distribution-Free Interval-Wise Inference for Functional-on-Scalar Linear Models. \emph{MOX-report 3/2015}, Politecnico di Milano.
 
 }
 \author{
@@ -82,9 +85,7 @@ data <- rbind(NASAtemp$milan,NASAtemp$paris)
 lab <- c(rep(0,22),rep(1,22))
 
 # Performing the ITP
-\dontrun{
-
-ITP.result <- ITPlmbspline(data ~ lab,B=1000,nknots=20)
+ITP.result <- ITPlmbspline(data ~ lab,B=1000,nknots=20,order=3)
 # Summary of the ITP results
 summary(ITP.result)
 
@@ -98,8 +99,6 @@ plot(ITP.result,main='NASA data', plot.adjpval = TRUE,xlab='Day',xrange=c(1,365)
 # To have all plots in one device
 layout(matrix(1:6,nrow=3,byrow=FALSE))
 plot(ITP.result,main='NASA data', plot.adjpval = TRUE,xlab='Day',xrange=c(1,365))
-}
-
 
 
 }

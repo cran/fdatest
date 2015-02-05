@@ -65,6 +65,8 @@ A. Pini and S. Vantini (2013). The Interval Testing Procedure: Inference for Fun
 Alessia Pini, Simone Vantini
 }
 \seealso{
+\code{\link{ITPimage}} for the plot of p-values heatmaps. 
+
 See also \code{\link{ITP1bspline}} and \code{\link{ITP1fourier}} to perform the ITP to test for the mean of a functional populations. 
 See \code{\link{plot.ITP2}} and \code{\link{plot.ITPlm}} for the plot method applied to the ITP results of two-population tests and linear models, respectively.
 }
@@ -80,15 +82,6 @@ plot(ITP.result.bspline,xlab='Day',xrange=c(0,365),main='NASA data')
 # Selecting the significant components for the radius at 5% level
 which(ITP.result.bspline$corrected.pval < 0.05)
 
-# Performing the ITP for one population with the Fourier basis
-ITP.result.fourier <- ITP1fourier(NASAtemp$milan,maxfrequency=20,B=1000)
-
-# Plotting the results of the ITP
-layout(1)
-plot(ITP.result.fourier,xlab='Day',xrange=c(1,365),main='NASA data')
-
-# Selecting the significant components for the radius at 5% level
-which(ITP.result.fourier$corrected.pval < 0.05)
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

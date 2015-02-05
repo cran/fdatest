@@ -1,2 +1,10 @@
 import(fda)
 exportPattern("^[[:alpha:]]+")
+
+
+S3method(summary, ITPaov)
+S3method(summary, ITPlm)
+S3method(plot, ITP1) 
+S3method(plot, ITP2) 
+S3method(plot, ITPaov)
+S3method(plot, ITPlm)

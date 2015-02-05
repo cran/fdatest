@@ -50,6 +50,7 @@ An object of class "\code{ITP2}" is a list containing at least the following com
 \item{data.eval}{Evaluation on a fine uniform grid of the functional data obtained through the basis expansion.}
 \item{heatmap.matrix}{Heatmap matrix of p-values (used only for plots).}
 }
+
 \references{
 A. Pini and S. Vantini (2013). The Interval Testing Procedure: Inference for Functional Data Controlling the Family Wise Error Rate on Intervals. \emph{MOX-report 13/2013}, Politecnico di Milano.
 
@@ -70,12 +71,13 @@ See also \code{\link{ITP2pafourier}},  \code{\link{ITP2bspline}}, \code{\link{IT
 data(NASAtemp)
 # Performing the ITP
 ITP.result <- ITP2fourier(NASAtemp$milan,NASAtemp$paris,maxfrequency=20,B=1000,paired=TRUE)
-# Plotting the results of the ITP
-#\dontrun{
 
+# Plotting the results of the ITP
 plot(ITP.result,main='NASA data',xrange=c(1,365),xlab='Day')
 
-#}
+# Plotting the p-value heatmap
+ITPimage(ITP.result,abscissa.range=c(1,365))
+
 # Selecting the significant coefficients
 which(ITP.result$corrected.pval < 0.05)
 

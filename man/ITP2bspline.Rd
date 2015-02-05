@@ -65,22 +65,22 @@ Alessia Pini, Simone Vantini
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-See also \code{\link{summary.ITPlm}} for summaries. 
-For different types of ITP-based tests, see \code{\link{ITP1bspline}}, \code{\link{ITP1fourier}}, \code{\link{ITP2fourier}}, \code{\link{ITP2pafourier}}, and \code{\link{ITPimage}}.
+For tests of comparison between two populations, see \code{\link{ITP2fourier}}, \code{\link{ITP2pafourier}}.
+For different types of ITP-based tests, see \code{\link{ITP1bspline}}, \code{\link{ITP1fourier}}, \code{\link{ITPlmbspline}}, \code{\link{ITPaovbspline}} and \code{\link{ITPimage}}.
 }
 \examples{
 # Importing the NASA temperatures data set
 data(NASAtemp)
 # Performing the ITP
 ITP.result <- ITP2bspline(NASAtemp$milan,NASAtemp$paris,nknots=50,B=1000)
-# Plotting the results of the ITP
-#\dontrun{
 
-#ITPimage(ITP.result,abscissa.range=c(0,12))
+# Plotting the results of the ITP
 plot(ITP.result,main='NASA data',xrange=c(1,365),xlab='Day')
 
-#}
-# Selecting the significant components for the radius at 5% level
+# Plotting the p-values heatmap
+ITPimage(ITP.result,abscissa.range=c(0,12))
+
+# Selecting the significant components at 5% level
 which(ITP.result$corrected.pval < 0.05)
 
 }
