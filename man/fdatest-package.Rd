@@ -12,8 +12,8 @@ Implementation of the Interval Testing Procedure for functional data in differen
 \tabular{ll}{
 Package: \tab fdatest\cr
 Type: \tab Package\cr
-Version: \tab 2.1\cr
-Date: \tab 2015-02-05\cr
+Version: \tab 2.1.1\cr
+Date: \tab 2022-05-04\cr
 License: \tab GPL-2\cr
 }
 

@@ -1,6 +1,4 @@
 import(fda)
-exportPattern("^[[:alpha:]]+")
-
 
 S3method(summary, ITPaov)
 S3method(summary, ITPlm)
@@ -8,3 +6,19 @@ S3method(plot, ITP1)
 S3method(plot, ITP2) 
 S3method(plot, ITPaov)
 S3method(plot, ITPlm)
+export(ITP1bspline)
+export(ITP1fourier)
+export(ITP2bspline)
+export(ITP2fourier)
+export(ITP2pafourier)
+export(ITPaovbspline)
+export(ITPimage)
+export(ITPlmbspline)
+
+
+importFrom("grDevices", "rainbow")
+importFrom("graphics", "abline", "axis", "image", "layout", "lines",
+     "matlines", "par", "points", "rect")
+importFrom("stats", "aov", "as.formula", "cov", "fft", "lm", "lm.fit",
+     "model.frame", "model.matrix", "model.response", "optimize",
+     "rbinom", "summary.lm")

@@ -4,3 +4,5 @@ Release 1.0 (2013-07-23): one and two population t-tests implemented.
 Release 2.0 (2014-11-24): added ITPlmbspline and ITPaovbspline for testing functional ANOVA and linear models.
 
 Release 2.1 (2015-02-05): faster version of ITPlmbspline and ITPaovbspline functions. 
+
+Release 2.1.1 (2022-05-04): minor fixes in the code. 
